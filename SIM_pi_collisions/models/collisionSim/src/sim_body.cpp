@@ -39,8 +39,8 @@ int sim_integ(CollisionHandler* C) {
 }
 
 int sim_default_data(CollisionHandler* C) {
-    C->block1.pos0 = 1; //These are arbitrary. All that matters is that block2 has a higher x value and both are positive
-    C->block2.pos0 = 3;
+    C->block1.pos0 = 5; //These are arbitrary. All that matters is that block2 has a higher x value and both are positive
+    C->block2.pos0 = 7;
 
     C->block1.vel0 = 0;
     C->block2.vel0 = -1;
@@ -74,6 +74,8 @@ double wall_block_impact(CollisionHandler* C) {
     Block& b1 = C->block1;
     Block& b2 = C->block2;
 
+    C->wallBlockCollision.mode = Decreasing;
+
     C->wallBlockCollision.error = C->block1.pos;
     now = get_integ_time();
     tgo = regula_falsi( now, &(C->wallBlockCollision) );
@@ -84,7 +86,7 @@ double wall_block_impact(CollisionHandler* C) {
         double newB1Velocity = -b1.vel;
         b1.vel = newB1Velocity;
 
-        b2.pos -= b1.pos; //Shifting both blocks away from the negative side of the wall
+        //b2.pos -= b1.pos; //Shifting both blocks away from the negative side of the wall
         b1.pos = 0; //For some reason, shifting the blocks away does not improve results but takes way longer. I am not sure why.
 
         if (C->verbose) {
@@ -100,6 +102,8 @@ double inter_block_impact(CollisionHandler* C) {
     
     Block& b1 = C->block1;
     Block& b2 = C->block2;
+
+    C->interBlockCollision.mode = Decreasing;
 
     C->interBlockCollision.error = C->block2.pos - C->block1.pos - 1;
     now = get_integ_time() ;                         

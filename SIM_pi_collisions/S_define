@@ -42,7 +42,7 @@ class CollisionSimObject : public Trick::SimObject {
 
 CollisionSimObject dyn;
 
-IntegLoop dyn_integloop (0.01) dyn;
+IntegLoop dyn_integloop (0.0001) dyn;
 
 void create_connections() {
     //Euler is used because precision beyond first order is unnecessary

@@ -16,5 +16,4 @@ dyn.collisionHandler.block2.vel0 = -1
 
 dyn_integloop.getIntegrator(trick.Euler, 2) #Adding a third timestep parameter does not work.
 
-#Hard stop preventing accurate approximation for block2/block1 mass ratios over 100000000
 trick.stop(1000000) 
