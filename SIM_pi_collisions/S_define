@@ -1,0 +1,51 @@
+/************************TRICK HEADER*************************
+PURPOSE:
+    (S_define file for SIM_pi_collisions)
+LIBRARY DEPENDENCIES:
+    (
+      (collisionSim/src/sim_body.cpp)
+    )
+*************************************************************/
+
+#include "sim_objects/default_trick_sys.sm"
+##include "collisionSim/include/collision_handler.h"
+##include "collisionSim/include/sim_body.h"
+
+/*
+This simulation is based off of the scenario given in the popular 3blue1brown video:
+https://youtu.be/HEfHFsfGXjs
+
+The basic idea is that there are two blocks and a wall. The wall is to the left of both blocks.
+At the start of the simulation, the right block is sent towards the left block with a constant velocity.
+After a series of perfectly elastic collisions, the total number of collisions can be used to approximate
+pi, given that the mass ratio of the blocks fulfills certain conditions.
+
+This simulation prints all collision times and returns the total collision count at the end.
+*/
+
+class CollisionSimObject : public Trick::SimObject {
+
+    public:
+        CollisionHandler collisionHandler;
+
+        CollisionSimObject() {
+            ("default_data")            sim_default_data( &collisionHandler );
+            ("initialization")          sim_init( &collisionHandler );
+            ("derivative")              sim_deriv( &collisionHandler );
+            ("integration") trick_ret=  sim_integ( &collisionHandler );
+            ("dynamic_event")           wall_block_impact( &collisionHandler ); //When left block hits the wall
+            ("dynamic_event")           inter_block_impact( &collisionHandler ); //When left block hits right block
+            ("post_integration")        check_if_over( &collisionHandler );
+            ("shutdown")                sim_shutdown( &collisionHandler );
+        }
+};
+
+CollisionSimObject dyn;
+
+IntegLoop dyn_integloop (0.01) dyn;
+
+void create_connections() {
+    //Euler is used because precision beyond first order is unnecessary
+    //Runge kutta and other methods just make it slower for no gain in accuracy
+    dyn_integloop.getIntegrator(Euler, 2);
+}
