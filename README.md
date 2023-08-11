@@ -10,3 +10,14 @@ This simulation prints all collision times and returns the total collision count
 
 ## Purpose
 This is a very simple use of NASA Trick intended to help me learn how to use the software.
+
+## How to Run
+Assuming you have already setup the NASA trick software (https://github.com/nasa/trick), clone this repository and run the following commands within the repository's top level directory:
+
+
+To build:
+trick-CP
+
+./S_main_... (name may depend on your operating system) RUN_test/input.py
+
+This run command starts the program with the executable with the input.py file as a parameter.
